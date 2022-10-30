@@ -157,6 +157,9 @@ class BinaryTree
          *  as examples.
          */
 
+        void mirror(Node* node);
+        void isOrderedRecursiveHelper(Node* node, std::vector<T>& order) const;
+
         /**
          * Private helper function for the public height function.
          * @param subRoot The current node in the recursion

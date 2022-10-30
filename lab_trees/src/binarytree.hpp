@@ -78,7 +78,22 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
     template <typename T>
 void BinaryTree<T>::mirror()
 {
+    mirror(this -> getRoot());
     //your code here
+}
+
+template <typename T>
+void BinaryTree<T>::mirror(Node* node)
+{
+    if (node == NULL) {
+        return;
+    } else {
+        Node* temp = node -> left;
+        node -> left = node -> right;
+        node -> right = temp;
+        mirror(node -> left);
+        mirror(node -> right);
+    }
 }
 
 
@@ -91,9 +106,32 @@ void BinaryTree<T>::mirror()
 template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
-    // your code here
-    return false;
+    Node* temp = this -> getRoot();
+    std::stack<Node*> order;
+    std::vector<T> vect;
+    Node* current = this -> getRoot();
+    while (current != NULL || !order.empty()) {
+        while (current != NULL) {
+            order.push(current);
+            current = current -> left;
+        }
+
+        current = order.top();
+        vect.push_back(current -> elem);
+
+        order.pop();
+        current = current -> right;
+    }
+
+    for (size_t i = 0; i < vect.size() - 1; i++) {
+        if (vect.at(i) > vect.at(i+1)) {
+            return false;
+        }
+    }
+    return true;
 }
+
+
 
 /**
  * isOrdered() function recursive version
@@ -105,6 +143,28 @@ template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
     // your code here
-    return false;
+    std::vector<T> vect;
+    isOrderedRecursiveHelper(this -> getRoot(), vect);
+
+    for (size_t i = 0; i < vect.size() - 1; i++) {
+        if (vect.at(i) > vect.at(i+1)) {
+            return false;
+        }
+    }
+    return true;
 }
+
+template <typename T>
+void BinaryTree<T>::isOrderedRecursiveHelper(Node* node, std::vector<T>& order) const
+{
+    // your code here
+    if (node == NULL) {
+        return;
+    }
+    isOrderedRecursiveHelper(node->left, order);
+    order.push_back(node -> elem);
+    isOrderedRecursiveHelper(node->right, order);
+}
+
+
 
